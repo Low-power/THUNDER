@@ -84,7 +84,7 @@ OBJECTS := \
 
 TARGETS = $(basename $(notdir $(wildcard appsrc/*.cpp)))
 
-default:	$(addprefix bin/,$(TARGETS))
+default:	bin $(addprefix bin/,$(TARGETS))
 
 bin/%:	appsrc/%.o $(OBJECTS)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LIBS)
