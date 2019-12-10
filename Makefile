@@ -18,8 +18,12 @@ CFLAGS += $(CFLAGS_WARNING) $(CFLAGS_MACHINE) -fopenmp -O3 $(DEFINES) $(INCLUDES
 CXXFLAGS += $(CFLAGS_WARNING) $(CFLAGS_MACHINE) -fopenmp -O3 $(DEFINES) $(INCLUDES) $(EIGEN_CFLAGS) $(JSONCPP_CFLAGS)
 LDFLAGS += -fopenmp
 ifdef USE_INTEL_MKL
+##DEFINES += -D MKL_ILP64=1
 INCLUDES += -I /opt/intel/compilers_and_libraries_2019/linux/mkl/include/fftw
-LIBS +=
+LDFLAGS += -L /opt/intel/compilers_and_libraries_2019/linux/mkl/lib/intel64
+##LIBS += -l mkl_intel_ilp64 -l mkl_gnu_thread -l mkl_core
+#LIBS += -l mkl_intel_lp64 -l mkl_gnu_thread -l mkl_core
+LIBS += -l mkl_rt
 else
 LIBS += -l fftw3 -l fftw3_threads
 endif
