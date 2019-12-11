@@ -568,12 +568,12 @@ void gebp_kernel<LhsScalar,RhsScalar,Index,mr,nr,ConjugateLhs,ConjugateRhs>
 
         // gets res block as register
         AccPacket C0, C1, C2, C3, C4, C5, C6, C7;
-                  traits.initAcc(C0);
-                  traits.initAcc(C1);
+        traits.initAcc(C0);
+        traits.initAcc(C1);
         if(nr==4) traits.initAcc(C2);
         if(nr==4) traits.initAcc(C3);
-                  traits.initAcc(C4);
-                  traits.initAcc(C5);
+        traits.initAcc(C4);
+        traits.initAcc(C5);
         if(nr==4) traits.initAcc(C6);
         if(nr==4) traits.initAcc(C7);
 
@@ -940,18 +940,18 @@ EIGEN_ASM_COMMENT("mybegin4");
         ResScalar* r2 = r1 + resStride;
         ResScalar* r3 = r2 + resStride;
 
-                  R0 = ploadu<ResPacket>(r0);
-                  R1 = ploadu<ResPacket>(r1);
+        R0 = ploadu<ResPacket>(r0);
+        R1 = ploadu<ResPacket>(r1);
         if(nr==4) R2 = ploadu<ResPacket>(r2);
         if(nr==4) R3 = ploadu<ResPacket>(r3);
 
-                  traits.acc(C0, alphav, R0);
-                  traits.acc(C1, alphav, R1);
+        traits.acc(C0, alphav, R0);
+        traits.acc(C1, alphav, R1);
         if(nr==4) traits.acc(C2, alphav, R2);
         if(nr==4) traits.acc(C3, alphav, R3);
 
-                  pstoreu(r0, R0);
-                  pstoreu(r1, R1);
+        pstoreu(r0, R0);
+        pstoreu(r1, R1);
         if(nr==4) pstoreu(r2, R2);
         if(nr==4) pstoreu(r3, R3);
       }
@@ -996,8 +996,8 @@ EIGEN_ASM_COMMENT("mybegin4");
 
           blB += nr;
         }
-                  res[(j2+0)*resStride + i] += alpha*C0;
-                  res[(j2+1)*resStride + i] += alpha*C1;
+        res[(j2+0)*resStride + i] += alpha*C0;
+        res[(j2+1)*resStride + i] += alpha*C1;
         if(nr==4) res[(j2+2)*resStride + i] += alpha*C2;
         if(nr==4) res[(j2+3)*resStride + i] += alpha*C3;
       }

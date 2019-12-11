@@ -1,5 +1,6 @@
 
-EIGEN_CFLAGS := -I /usr/include/eigen3
+#EIGEN_CFLAGS := -I /usr/include/eigen3
+EIGEN_CFLAGS := -I external/Eigen3
 JSONCPP_CFLAGS := -I /usr/include/jsoncpp
 
 CC := gcc
@@ -10,6 +11,7 @@ CFLAGS_WARNING := -Wall -Wno-uninitialized -Wno-deprecated-declarations -Wno-sig
 ifdef USE_AVX512
 DEFINES += -D ENABLE_SIMD_512=1 -D ENABLE_SIMD_256=1
 CFLAGS_MACHINE := -mavx512f -mavx512cd
+# May be need to add -xCORE-AVX512 for icc and icpc?
 else
 DEFINES += -D ENABLE_SIMD_256=1
 CFLAGS_MACHINE := -mavx
