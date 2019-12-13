@@ -1,12 +1,18 @@
 
 #EIGEN_CFLAGS := -I /usr/include/eigen3
 EIGEN_CFLAGS := -I external/Eigen3
-JSONCPP_CFLAGS := -I /usr/include/jsoncpp
+#JSONCPP_CFLAGS := -I /usr/include/jsoncpp
+JSONCPP_CFLAGS := -I external/jsoncpp
+#JSONCPP_LDFLAGS := -L external/jsoncpp
 
+ifeq ($(CC),cc)
 CC := gcc
+endif
+ifeq ($(CXX),c++)
 CXX := g++
+endif
 
-INCLUDES = -I include -I include/Functions -I include/Image -I include/Geometry -I external/easylogging
+INCLUDES += -I include -I include/Functions -I include/Image -I include/Geometry -I external/easylogging
 CFLAGS_WARNING := -Wall -Wno-uninitialized -Wno-deprecated-declarations -Wno-sign-compare
 CFLAGS_OPTIMIZING := -O2
 ifdef USE_AVX512
@@ -19,7 +25,7 @@ CFLAGS_MACHINE := -mavx
 endif
 CFLAGS += $(CFLAGS_WARNING) $(CFLAGS_MACHINE) -fopenmp $(CFLAGS_OPTIMIZING) $(DEFINES) $(INCLUDES) $(EIGEN_CFLAGS) $(JSONCPP_CFLAGS)
 CXXFLAGS += $(CFLAGS_WARNING) $(CFLAGS_MACHINE) -fopenmp $(CFLAGS_OPTIMIZING) $(DEFINES) $(INCLUDES) $(EIGEN_CFLAGS) $(JSONCPP_CFLAGS)
-LDFLAGS += -fopenmp
+LDFLAGS += -fopenmp -L lib
 ifdef USE_INTEL_MKL
 ##DEFINES += -D MKL_ILP64=1
 INCLUDES += -I /opt/intel/compilers_and_libraries_2019/linux/mkl/include/fftw
@@ -36,8 +42,6 @@ LDFLAGS += -L /opt/intel/compilers_and_libraries_2019/linux/mpi/intel64/lib/rele
 LIBS += -l fabric
 endif
 LIBS += -l gsl -l gslcblas -l jsoncpp -l pthread -l mpi
-
-MAIN_OBJECTS := \
 
 OBJECTS := \
 	src/Coordinate5D.o \
@@ -91,15 +95,18 @@ OBJECTS := \
 
 TARGETS = $(basename $(notdir $(wildcard appsrc/*.cpp)))
 
-default:	bin $(addprefix bin/,$(TARGETS))
+default:	bin lib/libjsoncpp.a $(addprefix bin/,$(TARGETS))
 
 .SECONDARY:	$(addsuffix .o,$(basename $(wildcard appsrc/*.cpp))) $(OBJECTS)
 
 bin/%:	appsrc/%.o $(OBJECTS)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LIBS)
 
-bin:
-	mkdir bin
+bin lib:
+	mkdir $@
+
+lib/libjsoncpp.a:	lib external/jsoncpp/jsoncpp.o
+	$(AR) -r $@ external/jsoncpp/jsoncpp.o
 
 clean:
 	rm -f appsrc/*.o $(OBJECTS)
