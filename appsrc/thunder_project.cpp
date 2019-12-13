@@ -222,7 +222,7 @@ int main(int argc, char* argv[])
         int m = l + rank * (n / size);
 
         fprintf(file,
-                "%012ld@%s_Rank_%06d.mrcs %18.9lf %18.9lf %18.9lf %18.9lf\n",
+                "%012d@%s_Rank_%06d.mrcs %18.9lf %18.9lf %18.9lf %18.9lf\n",
                  l,
                  output,
                  rank,
